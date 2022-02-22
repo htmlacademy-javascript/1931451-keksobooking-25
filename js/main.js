@@ -1,5 +1,5 @@
 //Получаем случайное целое число из выбранного диапазона
-function getRandomNumber(min, max) {
+const getRandomNumber = (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
 
@@ -16,14 +16,14 @@ function getRandomNumber(min, max) {
   }
 
   return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+};
 //https://developer.mozilla.org
 
 getRandomNumber(1.5, 2.1);
 
 
 //Получаем случайное число с плавающей точкой из выбранного диапазона
-function generateСoordinate(min, max, float) {
+const generateСoordinate = (min, max, float) => {
   let coordinate;
 
   if (min < 0 || max < 0) {
@@ -42,7 +42,7 @@ function generateСoordinate(min, max, float) {
 
   coordinate = Math.random() * (max - min + 1) + min;
   return coordinate.toFixed(float);
-}
+};
 
 generateСoordinate(1.1, 1.2, 3);
 
