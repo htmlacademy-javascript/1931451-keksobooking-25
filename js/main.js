@@ -1,5 +1,4 @@
-/* eslint-disable no-console */
-const TYPE_APARTMENT = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
+const TYPES_APARTMENT = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
 const TIMES = ['12:00', '13:00', '14:00'];
 const FEATURES_APARTMENT = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 const PHOTOS_APARTMENT = [
@@ -7,9 +6,8 @@ const PHOTOS_APARTMENT = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'
 ];
-const LAT_COORDINATE = [35.65000, 35.70000];
-const LNG_COORDINATE = [139.70000, 139.80000];
-const FLOATING_POINT = 5;
+const MIN_PRICE = 200;
+const MAX_PRICE = 2000;
 const RENTAL_AD_COUNT = 10;
 
 //Получаем случайное целое число из выбранного диапазона
@@ -99,18 +97,23 @@ const getImgNumber = (element) => {
 const usersIdShuffle = getShuffleArray(RENTAL_AD_COUNT);
 
 
-function createObjAd() {
+function createOffers() {
+  const lat = generateCoordinate(35.65000, 35.70000, 5);
+  const lng = generateCoordinate(139.70000, 139.80000, 5);
+  const rooms = getRandomNumber(1, 5);
+  const quests = rooms + 1;
+
   return ({
     author: {
       avatar: `img/avatars/user-${getImgNumber(usersIdShuffle)}.png`
     },
     offer: {
       title: 'Загаловок',
-      address: `${generateCoordinate(LAT_COORDINATE[0], LAT_COORDINATE[1], FLOATING_POINT)} ${generateCoordinate(LNG_COORDINATE[0], LNG_COORDINATE[1], FLOATING_POINT)}`,
-      price: getRandomNumber(200, 2000),
-      type: getRandomArrayElement(TYPE_APARTMENT),
-      rooms: getRandomNumber(1, 5),
-      guests: getRandomNumber(1, 5),
+      address: `${lat} ${lng}`,
+      price: getRandomNumber(MIN_PRICE, MAX_PRICE),
+      type: getRandomArrayElement(TYPES_APARTMENT),
+      rooms: rooms,
+      guests: quests,
       checkin: getRandomArrayElement(TIMES),
       checkout: getRandomArrayElement(TIMES),
       features: getArray(FEATURES_APARTMENT),
@@ -118,10 +121,10 @@ function createObjAd() {
       photos: getArray(PHOTOS_APARTMENT),
     },
     location: {
-      lat: generateCoordinate(LAT_COORDINATE[0], LAT_COORDINATE[1], FLOATING_POINT),
-      lng: generateCoordinate(LNG_COORDINATE[0], LNG_COORDINATE[1], FLOATING_POINT)
+      lat: lat,
+      lng: lng
     }
   });
 }
 
-const arrayAds = Array.from({ length: RENTAL_AD_COUNT }, createObjAd);
+const arrayOffers = Array.from({ length: RENTAL_AD_COUNT }, createOffers);
