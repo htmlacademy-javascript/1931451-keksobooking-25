@@ -1,12 +1,15 @@
+/* eslint-disable no-console */
 const TYPE_APARTMENT = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
-const CHECKIN = ['12:00', '13:00', '14:00'];
-const CHECKOUT = ['12:00', '13:00', '14:00'];
+const TIMES = ['12:00', '13:00', '14:00'];
 const FEATURES_APARTMENT = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 const PHOTOS_APARTMENT = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'
 ];
+const LAT_COORDINATE = [35.65000, 35.70000];
+const LNG_COORDINATE = [139.70000, 139.80000];
+const FLOATING_POINT = 5;
 const RENTAL_AD_COUNT = 10;
 
 //Получаем случайное целое число из выбранного диапазона
@@ -30,11 +33,9 @@ const getRandomNumber = (min, max) => {
 };
 //https://developer.mozilla.org
 
-getRandomNumber(1.5, 2.1);
-
 
 //Получаем случайное число с плавающей точкой из выбранного диапазона
-const generateСoordinate = (min, max, float) => {
+const generateCoordinate = (min, max, float) => {
   let coordinate;
 
   if (min < 0 || max < 0) {
@@ -55,25 +56,11 @@ const generateСoordinate = (min, max, float) => {
   return coordinate.toFixed(float);
 };
 
-generateСoordinate(1.1, 1.2, 3);
-
-
-const getNumber = (min, max) => {
-  let number = getRandomNumber(min, max);
-
-  if (number < 10) {
-    number = `0${number}`;
-  }
-
-  return String(number);
-};
-
 
 const getRandomArrayElement = (element) => element[getRandomNumber(0, element.length - 1)];
 
 
 const getArray = (element) => {
-  //const maxLength = features.length;  Стоит ли здесь объявить переменную и использовать её?
   const lengthOfArray = getRandomNumber(1, element.length);
   const array = [];
 
@@ -90,30 +77,51 @@ const getArray = (element) => {
 };
 
 
-const createObjAd = () => ({
-  autor: {
-    avatar: `img/avatars/user-${getNumber(1, RENTAL_AD_COUNT)}.png` //Непонятно как здесь сделать чтобы список не повторялся, и шел друг за другом.
-  },
-  offer: {
-    title: 'Загаловок',
-    address: `${generateСoordinate(35.65000, 35.70000, 5)} ${generateСoordinate(139.70000, 139.80000, 5)}`,
-    price: getRandomNumber(200, 2000),
-    type: getRandomArrayElement(TYPE_APARTMENT),
-    rooms: getRandomNumber(1, 5),
-    guests: getRandomNumber(1, 5), //Хотел сделать чтобы значением этого свойства было this.rooms + 1, но не получилось, т.к. в браузере ключ rooms объявляется после этого, так и не понял как можно так сделать. Поэтому сделал так как нужно было в задании.
-    checkin: getRandomArrayElement(CHECKIN),
-    checkout: getRandomArrayElement(CHECKOUT),
-    features: getArray(FEATURES_APARTMENT),
-    description: 'Здесь могла быть ваша реклама!',
-    photos: getArray(PHOTOS_APARTMENT),
-  },
-  location: {
-    lat: generateСoordinate(35.65000, 35.70000, 5),
-    lng: generateСoordinate(139.70000, 139.80000, 5)
+//Получаем новый массив из цифр в случайном порядке, где параметр arrayLength длина нужного массива
+const getShuffleArray = (arrayLength) => {
+  const newArray = Array.from({ length: arrayLength }, (value, index) => ++index);
+
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const randomIndex = Math.floor(Math.random() * (i + 1));
+    const swap = newArray[i];
+    newArray[i] = newArray[randomIndex];
+    newArray[randomIndex] = swap;
   }
-});
+
+  return newArray;
+};
+
+const getImgNumber = (element) => {
+  const imgNumber = element.splice(getRandomNumber(element), 1);
+  return (imgNumber > 9) ? imgNumber : `0${imgNumber}`;
+};
+
+const usersIdShuffle = getShuffleArray(RENTAL_AD_COUNT);
+
+
+function createObjAd() {
+  return ({
+    author: {
+      avatar: `img/avatars/user-${getImgNumber(usersIdShuffle)}.png`
+    },
+    offer: {
+      title: 'Загаловок',
+      address: `${generateCoordinate(LAT_COORDINATE[0], LAT_COORDINATE[1], FLOATING_POINT)} ${generateCoordinate(LNG_COORDINATE[0], LNG_COORDINATE[1], FLOATING_POINT)}`,
+      price: getRandomNumber(200, 2000),
+      type: getRandomArrayElement(TYPE_APARTMENT),
+      rooms: getRandomNumber(1, 5),
+      guests: getRandomNumber(1, 5),
+      checkin: getRandomArrayElement(TIMES),
+      checkout: getRandomArrayElement(TIMES),
+      features: getArray(FEATURES_APARTMENT),
+      description: 'Здесь могла быть ваша реклама!',
+      photos: getArray(PHOTOS_APARTMENT),
+    },
+    location: {
+      lat: generateCoordinate(LAT_COORDINATE[0], LAT_COORDINATE[1], FLOATING_POINT),
+      lng: generateCoordinate(LNG_COORDINATE[0], LNG_COORDINATE[1], FLOATING_POINT)
+    }
+  });
+}
 
 const arrayAds = Array.from({ length: RENTAL_AD_COUNT }, createObjAd);
-
-// eslint-disable-next-line no-console
-console.log(arrayAds);
