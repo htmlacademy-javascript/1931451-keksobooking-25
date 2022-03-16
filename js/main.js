@@ -1,1 +1,1 @@
-import { arrayOffers } from './data.js';
+import './offers.js';
