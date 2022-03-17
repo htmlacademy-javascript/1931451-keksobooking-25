@@ -21,7 +21,7 @@ const getRandomNumber = (min, max) => {
 
 
 //Получаем случайное число с плавающей точкой из выбранного диапазона
-const generateCoordinate = (min, max, float) => {
+const generateCoordinate = (min, max, float = 1) => {
   let coordinate;
 
   if (min < 0 || max < 0) {
