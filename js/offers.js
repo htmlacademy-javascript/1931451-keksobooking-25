@@ -12,6 +12,10 @@ const cardFragment = document.createDocumentFragment();
 
 const offer = () => {
   const card = cardTemplate.cloneNode(true);
+  const TextRoomsSpelling = {
+    MIN_VALUE: 1,
+    MAX_VALUE: 5,
+  };
 
   if (!offers[0].offer.features) {
     offers[0].offer.features = [];
@@ -45,9 +49,9 @@ const offer = () => {
 
 
   let textRooms = 'комнаты';
-  if (offers[0].offer.rooms === 1) {
+  if (offers[0].offer.rooms === TextRoomsSpelling.MIN_VALUE) {
     textRooms = 'комната';
-  } else if (offers[0].offer.rooms >= 5) {
+  } else if (offers[0].offer.rooms >= TextRoomsSpelling.MAX_VALUE) {
     textRooms = 'комнат';
   }
 
