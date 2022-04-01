@@ -1,8 +1,7 @@
 import { renderOffer } from './render-offer.js';
 import { arrayOffers } from './data.js';
 import { isEscapeKey } from './utils.js';
-/* eslint-disable no-console */
-/* eslint-disable eol-last */
+
 const CURRENT_COORDINATE = {
   LAT: 35.6846743,
   LNG: 139.7535566,
@@ -22,7 +21,7 @@ const IconsData = {
 
 const map = L.map('map-canvas')
   .on('load', () => {
-    console.log('Карта загружена');
+    //console.log('Карта загружена');
   })
   // .on('click', (evt) => {
   //   console.log(evt.target.getLatLng());
