@@ -96,5 +96,6 @@ const utils = {
   getIdNumber
 };
 
+const isEscapeKey = (evt) => evt.key === 'Escape';
 
-export { utils };
+export { utils, isEscapeKey };
