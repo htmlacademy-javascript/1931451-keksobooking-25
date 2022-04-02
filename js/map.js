@@ -89,9 +89,19 @@ mainMarker.addTo(map);
 const addressField = document.querySelector('#address');
 const getCoordinate = () => `${mainMarker._latlng.lat.toFixed(5)}, ${mainMarker._latlng.lng.toFixed(5)}`;
 
-addressField.disabled = true;
-addressField.value = getCoordinate();
-addressField.style.opacity = '0.6';
+const mapDefaultCoordinate = () => {
+  map.setView({
+    lat: CURRENT_COORDINATE.LAT,
+    lng: CURRENT_COORDINATE.LNG,
+  }, 12);
+};
+const mainMarkerDefaultCoordinate = () => {
+  mainMarker.setLatLng({
+    lat: CURRENT_COORDINATE.LAT,
+    lng: CURRENT_COORDINATE.LNG,
+  });
+  addressField.value = getCoordinate();
+};
 
 const onClickCoordinate = (evt) => {
   mainMarker.setLatLng(evt.latlng);
@@ -101,19 +111,16 @@ const onDraggableCoordinate = (evt) => {
   addressField.value = `${evt.target.getLatLng().lat.toFixed(5)}, ${evt.target.getLatLng().lng.toFixed(5)}`;
 };
 
+addressField.value = getCoordinate();
+addressField.style.opacity = '0.6';
+
 map.on('click', onClickCoordinate);
 mainMarker.on('moveend', onDraggableCoordinate);
 
 
 document.querySelector('#map-canvas').addEventListener('keydown', (evt) => {
   if (isEscapeKey(evt)) {
-    map.setView({
-      lat: CURRENT_COORDINATE.LAT,
-      lng: CURRENT_COORDINATE.LNG,
-    }, 12);
-    mainMarker.setLatLng({
-      lat: CURRENT_COORDINATE.LAT,
-      lng: CURRENT_COORDINATE.LNG,
-    });
+    mapDefaultCoordinate();
+    mainMarkerDefaultCoordinate();
   }
 });
