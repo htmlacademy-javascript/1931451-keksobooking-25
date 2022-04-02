@@ -21,11 +21,8 @@ const IconsData = {
 
 const map = L.map('map-canvas')
   .on('load', () => {
-    //console.log('Карта загружена');
+    //перевод карты в активное состояние после загрузки
   })
-  // .on('click', (evt) => {
-  //   console.log(evt.target.getLatLng());
-  // })
   .setView({
     lat: CURRENT_COORDINATE.LAT,
     lng: CURRENT_COORDINATE.LNG,
