@@ -1,3 +1,4 @@
+import { showPage } from './status-page.js';
 import { renderOffer } from './render-offer.js';
 import { arrayOffers } from './data.js';
 import { isEscapeKey } from './utils.js';
@@ -21,7 +22,7 @@ const IconsData = {
 
 const map = L.map('map-canvas')
   .on('load', () => {
-    //перевод карты в активное состояние после загрузки
+    showPage();
   })
   .setView({
     lat: CURRENT_COORDINATE.LAT,
