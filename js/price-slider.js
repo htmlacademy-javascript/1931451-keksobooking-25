@@ -2,6 +2,7 @@ const priceSlider = document.querySelector('.ad-form__slider');
 const priceField = document.querySelector('#price');
 const buttonClear = document.querySelector('.ad-form__reset');
 const PRICE_MAX_VALUE = 100000;
+const START_DEFAULT = 1000;
 
 priceSlider.style.marginTop = `${10}px`;
 
@@ -10,7 +11,7 @@ noUiSlider.create(priceSlider, {
     min: 0,
     max: PRICE_MAX_VALUE,
   },
-  start: 1000,
+  start: START_DEFAULT,
   step: 1,
   connect: 'lower',
   format: {
@@ -39,7 +40,7 @@ priceField.addEventListener('change', () => {
 
 buttonClear.addEventListener('click', () => {
   priceSlider.noUiSlider.updateOptions({
-    start: 1000,
+    start: START_DEFAULT,
   });
 });
 
