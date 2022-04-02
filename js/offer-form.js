@@ -1,10 +1,11 @@
+import './price-slider.js';
+
 const form = document.querySelector('.ad-form');
 const titleField = form.querySelector('#title');
 const priceField = form.querySelector('#price');
 const typeField = form.querySelector('#type');
 const roomsField = form.querySelector('#room_number');
 const capacityField = form.querySelector('#capacity');
-//const priceSlider = form.querySelector('.ad-form__slider');
 
 const TITLE_LENGTH = {
   MIN: 30,
@@ -90,4 +91,3 @@ form.addEventListener('submit', (evt) => {
   }
 
 });
-
