@@ -6,6 +6,8 @@ const priceField = form.querySelector('#price');
 const typeField = form.querySelector('#type');
 const roomsField = form.querySelector('#room_number');
 const capacityField = form.querySelector('#capacity');
+const timeInField = form.querySelector('#timein');
+const timeOutField = form.querySelector('#timeout');
 
 const TITLE_LENGTH = {
   MIN: 30,
@@ -82,6 +84,13 @@ titleField.addEventListener('input', (evt) => {
   }
 });
 
+timeInField.addEventListener('change', () => {
+  timeOutField.value = timeInField.value;
+});
+
+timeOutField.addEventListener('change', () => {
+  timeInField.value = timeOutField.value;
+});
 
 form.addEventListener('submit', (evt) => {
   const isValid = pristine.validate();
