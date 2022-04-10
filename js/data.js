@@ -54,4 +54,4 @@ function createOffers() {
 
 const arrayOffers = () => Array.from({ length: RENTAL_AD_COUNT }, createOffers);
 
-export { arrayOffers };
+export { arrayOffers, RENTAL_AD_COUNT };
