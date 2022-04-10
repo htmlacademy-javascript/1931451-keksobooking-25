@@ -102,7 +102,7 @@ const blockSubmitButton = () => {
 };
 
 const unblockSubmitButton = () => {
-  submitButton.disabled = true;
+  submitButton.disabled = false;
   submitButton.style.opacity = '1';
   submitButton.textContent = 'Опубликовать';
 };

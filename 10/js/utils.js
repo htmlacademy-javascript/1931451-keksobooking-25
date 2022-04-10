@@ -98,9 +98,10 @@ const utils = {
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-const showAlert = (message, color = 'red', time = 5000) => {
+const DEFAULT_ALERT_TIME = 5000;
+const showAlert = (message, color = 'red', time = DEFAULT_ALERT_TIME) => {
   const alertContainer = document.createElement('div');
-  alertContainer.style.zIndex = 1000;
+  alertContainer.style.zIndex = '1000';
   alertContainer.style.position = 'fixed';
   alertContainer.style.top = 0;
   alertContainer.style.left = 0;
