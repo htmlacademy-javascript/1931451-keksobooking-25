@@ -1,6 +1,5 @@
 import { showPage } from './status-page.js';
 import { renderOffer } from './render-offer.js';
-import { arrayOffers } from './data.js';
 import { isEscapeKey } from './utils.js';
 
 const CURRENT_COORDINATE = {
@@ -65,13 +64,6 @@ const createMarker = (object) => {
     .bindPopup(renderOffer(object));
 };
 
-const offers = arrayOffers();
-
-offers.forEach((offer) => {
-  createMarker(offer);
-});
-
-
 const mainMarker = L.marker(
   {
     lat: CURRENT_COORDINATE.LAT,
@@ -122,3 +114,6 @@ document.querySelector('#map-canvas').addEventListener('keydown', (evt) => {
     mainMarkerDefaultCoordinate();
   }
 });
+
+
+export { createMarker, mainMarkerDefaultCoordinate };

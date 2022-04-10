@@ -1,4 +1,6 @@
 import './price-slider.js';
+import { showAlert } from './utils.js';
+import { sendData } from './api.js';
 
 const form = document.querySelector('.ad-form');
 const titleField = form.querySelector('#title');
@@ -8,6 +10,7 @@ const roomsField = form.querySelector('#room_number');
 const capacityField = form.querySelector('#capacity');
 const timeInField = form.querySelector('#timein');
 const timeOutField = form.querySelector('#timeout');
+const submitButton = form.querySelector('.ad-form__submit');
 
 const TITLE_LENGTH = {
   MIN: 30,
@@ -92,11 +95,43 @@ timeOutField.addEventListener('change', () => {
   timeInField.value = timeOutField.value;
 });
 
-form.addEventListener('submit', (evt) => {
-  const isValid = pristine.validate();
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.style.opacity = '0.7';
+  submitButton.textContent = 'Отправляю...';
+};
 
-  if (!isValid) {
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.style.opacity = '1';
+  submitButton.textContent = 'Опубликовать';
+};
+
+const clearForm = (evt) => {
+  evt.target.reset();
+};
+
+const setOfferForm = (onSuccess) => {
+  form.addEventListener('submit', (evt) => {
     evt.preventDefault();
-  }
 
-});
+    const isValid = pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      sendData(
+        () => {
+          onSuccess();
+          clearForm(evt);
+          showAlert('Форма успешно отправлена!', 'green');
+          unblockSubmitButton();
+        },
+        () => {
+          showAlert('Не удалось отправить форму. Попробуйте ещё раз');
+        },
+        new FormData(evt.target),
+      );
+    }
+  });
+};
+
+export { setOfferForm };

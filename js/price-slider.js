@@ -24,6 +24,12 @@ noUiSlider.create(priceSlider, {
   },
 });
 
+const clearNoUiSlider = () => {
+  priceSlider.noUiSlider.updateOptions({
+    start: START_DEFAULT,
+  });
+};
+
 priceSlider.noUiSlider.on('slide', () => {
   priceField.value = priceSlider.noUiSlider.get();
 });
@@ -38,10 +44,6 @@ priceField.addEventListener('change', () => {
   priceSlider.noUiSlider.set([priceField.value, null]);
 });
 
-buttonClear.addEventListener('click', () => {
-  priceSlider.noUiSlider.updateOptions({
-    start: START_DEFAULT,
-  });
-});
+buttonClear.addEventListener('click', clearNoUiSlider);
 
-export { };
+export { clearNoUiSlider };
