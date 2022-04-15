@@ -1,15 +1,9 @@
-import { showPage, setDisableMapFilters } from './status-page.js';
+import { showPage } from './status-page.js';
 import { renderOffer } from './render-offer.js';
 import { isEscapeKey, showAlert } from './utils.js';
-import { filterData } from './filter.js';
-import { makeRequest } from './data.js';
-
+import { makeRequest } from './api.js';
 
 const RENTAL_AD_COUNT = 10;
-const MARKER_RESET_TIME = 0;
-
-const mapfilters = document.querySelector('.map__filters');
-const addressField = document.querySelector('#address');
 
 const CURRENT_COORDINATE = {
   LAT: 35.6846743,
@@ -23,8 +17,8 @@ const IconsData = {
   },
   BLUEICON: {
     url: './img/pin.svg',
-    size: [40, 40],
-    anchor: [20, 40],
+    size: [52, 52],
+    anchor: [26, 52],
   },
 };
 
@@ -49,8 +43,6 @@ const iconMarker = L.icon({
   iconAnchor: IconsData.BLUEICON.anchor,
 });
 
-const markerGroup = L.layerGroup().addTo(map);
-
 const createMarker = (object) => {
   const { lat, lng } = object.location;
   const marker = L.marker(
@@ -64,7 +56,7 @@ const createMarker = (object) => {
   );
 
   marker
-    .addTo(markerGroup)
+    .addTo(map)
     .bindPopup(renderOffer(object));
 };
 
@@ -80,6 +72,7 @@ const mainMarker = L.marker(
 );
 mainMarker.addTo(map);
 
+const addressField = document.querySelector('#address');
 const getCoordinate = () => `${mainMarker._latlng.lat.toFixed(5)}, ${mainMarker._latlng.lng.toFixed(5)}`;
 
 const mapDefaultCoordinate = () => {
@@ -96,7 +89,6 @@ const mainMarkerDefaultCoordinate = () => {
   addressField.value = getCoordinate();
 };
 
-//// Правильно ли здесь именнование функции? Или лучше переменовать на onCoordinateClick?
 const onClickCoordinate = (evt) => {
   mainMarker.setLatLng(evt.latlng);
   addressField.value = getCoordinate();
@@ -105,28 +97,19 @@ const onDraggableCoordinate = (evt) => {
   addressField.value = `${evt.target.getLatLng().lat.toFixed(5)}, ${evt.target.getLatLng().lng.toFixed(5)}`;
 };
 
-const resetMap = () => {
-  mapDefaultCoordinate();
-  resetMapFilters();
-  map.closePopup();
-  setTimeout(() => {
-    mainMarkerDefaultCoordinate();
-  }, MARKER_RESET_TIME);
-};
-
-const onEscKeydownReset = (evt) => {
-  if (isEscapeKey(evt)) {
-    resetMap();
-  }
-};
-
 addressField.value = getCoordinate();
+addressField.style.opacity = '0.6';
 
 map.on('click', onClickCoordinate);
 mainMarker.on('moveend', onDraggableCoordinate);
 
-document.querySelector('#map-canvas').addEventListener('keydown', onEscKeydownReset);
-mapfilters.addEventListener('keydown', onEscKeydownReset);
+
+document.querySelector('#map-canvas').addEventListener('keydown', (evt) => {
+  if (isEscapeKey(evt)) {
+    mapDefaultCoordinate();
+    mainMarkerDefaultCoordinate();
+  }
+});
 
 const createMarkers = (markers) => {
   markers.forEach((marker) => {
@@ -134,43 +117,20 @@ const createMarkers = (markers) => {
   });
 };
 
-const removeMarker = () => {
-  markerGroup.clearLayers();
-};
-
 let offers = [];
-
-function resetMapFilters() {
-  mapfilters.reset();
-  removeMarker();
-  createMarkers(filterData(offers));
-}
-
-const onMapFilterCahnge = () => {
-  removeMarker();
-  createMarkers(filterData(offers));
-};
 
 const onSuccess = (data) => {
   offers = data.slice();
 
   createMarkers(offers.slice(0, RENTAL_AD_COUNT));
-
-  mapfilters.addEventListener('change', onMapFilterCahnge);
-};
-
-const onFail = () => {
-  showAlert();
-  setDisableMapFilters();
 };
 
 map.on('load', () => {
-  makeRequest(onSuccess, onFail, 'GET');
+  makeRequest(onSuccess, showAlert, 'GET');
   showPage();
-})
-  .setView({
-    lat: CURRENT_COORDINATE.LAT,
-    lng: CURRENT_COORDINATE.LNG,
-  }, 12);
+}).setView({
+  lat: CURRENT_COORDINATE.LAT,
+  lng: CURRENT_COORDINATE.LNG,
+}, 12);
 
-export { mainMarkerDefaultCoordinate, resetMap };
+export { createMarker, mainMarkerDefaultCoordinate };

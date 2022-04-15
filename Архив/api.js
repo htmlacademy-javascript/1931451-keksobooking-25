@@ -1,5 +1,24 @@
-const RENTAL_AD_COUNT = 10;
+//const RENTAL_AD_COUNT = 10;
 
+const Urls = {
+  GET: 'https://25.javascript.pages.academy/keksobooking/data',
+  POST: 'https://25.javascript.pages.academy/keksobooking/data',
+};
+
+const makeRequest = (onSuccess, onFail, method, body) => {
+  fetch(Urls[method], {
+    method: method,
+    body: body
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      onSuccess(data);
+    })
+    .catch(() => {
+      onFail();
+    });
+};
+/*
 const getData = (onSuccess, onFail) => {
   fetch('https://25.javascript.pages.academy/keksobooking/data')
     .then((response) => response.json())
@@ -32,5 +51,5 @@ const sendData = (onSuccess, onFail, body) => {
       onFail('Не удалось отправить форму. Попробуйте ещё раз');
     });
 };
-
-export { getData, sendData };
+*/
+export { makeRequest };
