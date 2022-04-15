@@ -77,7 +77,7 @@ const getNumberCapacity = () => {
   const options = Array.from(capacityField.querySelectorAll('option'));
 
   //Пытался вставить index вместо ONE, TWO и т.д / не особо получилось, выдававался странный результат / потом пытался создать новый объект и также использовать index / тоже не получилось((
-  options.forEach((option, index) => {
+  options.forEach((option, /*index*/) => {
     const item = option.value.toString();
 
     let result;
