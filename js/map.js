@@ -105,6 +105,24 @@ const onDraggableCoordinate = (evt) => {
   addressField.value = `${evt.target.getLatLng().lat.toFixed(5)}, ${evt.target.getLatLng().lng.toFixed(5)}`;
 };
 
+const createMarkers = (markers) => {
+  markers.forEach((marker) => {
+    createMarker(marker);
+  });
+};
+
+let offers = [];
+
+const removeMarker = () => {
+  markerGroup.clearLayers();
+};
+
+const resetMapFilters = () => {
+  mapfilters.reset();
+  removeMarker();
+  createMarkers(filterData(offers));
+};
+
 const resetMap = () => {
   mapDefaultCoordinate();
   resetMapFilters();
@@ -119,32 +137,6 @@ const onEscKeydownReset = (evt) => {
     resetMap();
   }
 };
-
-addressField.value = getCoordinate();
-
-map.on('click', onClickCoordinate);
-mainMarker.on('moveend', onDraggableCoordinate);
-
-document.querySelector('#map-canvas').addEventListener('keydown', onEscKeydownReset);
-mapfilters.addEventListener('keydown', onEscKeydownReset);
-
-const createMarkers = (markers) => {
-  markers.forEach((marker) => {
-    createMarker(marker);
-  });
-};
-
-const removeMarker = () => {
-  markerGroup.clearLayers();
-};
-
-let offers = [];
-
-function resetMapFilters() {
-  mapfilters.reset();
-  removeMarker();
-  createMarkers(filterData(offers));
-}
 
 const onMapFilterChange = debounce(() => {
   removeMarker();
@@ -163,6 +155,14 @@ const onFail = () => {
   showAlert();
   setDisableMapFilters();
 };
+
+addressField.value = getCoordinate();
+
+map.on('click', onClickCoordinate);
+mainMarker.on('moveend', onDraggableCoordinate);
+
+document.querySelector('#map-canvas').addEventListener('keydown', onEscKeydownReset);
+mapfilters.addEventListener('keydown', onEscKeydownReset);
 
 map.on('load', () => {
   makeRequest(onSuccess, onFail, 'GET');
