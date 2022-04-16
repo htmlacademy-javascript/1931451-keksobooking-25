@@ -1,20 +1,17 @@
 import { showPage, setDisableMapFilters } from './status-page.js';
 import { renderOffer } from './render-offer.js';
-import { isEscapeKey, showAlert } from './utils.js';
+import { isEscapeKey, showAlert, debounce } from './utils.js';
 import { filterData } from './filter.js';
 import { makeRequest } from './data.js';
 
 
 const RENTAL_AD_COUNT = 10;
 const MARKER_RESET_TIME = 0;
-
-const mapfilters = document.querySelector('.map__filters');
-const addressField = document.querySelector('#address');
-
 const CURRENT_COORDINATE = {
   LAT: 35.6846743,
   LNG: 139.7535566,
 };
+
 const IconsData = {
   REDICON: {
     url: './img/main-pin.svg',
@@ -27,6 +24,9 @@ const IconsData = {
     anchor: [20, 40],
   },
 };
+
+const mapfilters = document.querySelector('.map__filters');
+const addressField = document.querySelector('#address');
 
 const map = L.map('map-canvas');
 
@@ -146,17 +146,17 @@ function resetMapFilters() {
   createMarkers(filterData(offers));
 }
 
-const onMapFilterCahnge = () => {
+const onMapFilterChange = debounce(() => {
   removeMarker();
   createMarkers(filterData(offers));
-};
+});
 
 const onSuccess = (data) => {
   offers = data.slice();
 
   createMarkers(offers.slice(0, RENTAL_AD_COUNT));
 
-  mapfilters.addEventListener('change', onMapFilterCahnge);
+  mapfilters.addEventListener('change', onMapFilterChange);
 };
 
 const onFail = () => {

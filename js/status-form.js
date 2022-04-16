@@ -58,7 +58,7 @@ function appendElement(element) {
 }
 
 function removeElement(element) {
-  document.body.removeChild(element);
+  element.remove();
 
   if (element === successTemplate) {
     document.removeEventListener('keydown', onEscKeydownSuccess);
@@ -66,7 +66,6 @@ function removeElement(element) {
   } else if (element === errorTemplate) {
     document.removeEventListener('keydown', onEscKeydownError);
     document.removeEventListener('click', onClickRemoveError);
-    errorButton.removeEventListener('click', onClickErrorButton);
   }
 }
 

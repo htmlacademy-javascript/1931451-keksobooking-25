@@ -1,5 +1,5 @@
 const DEFAULT_ALERT_TIME = 5000;
-const DEFAULT_DEBOUNCE_TIMEOUT_DELAY = 500;
+const DEBOUNCE_INTERVAL = 500;
 
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
@@ -26,9 +26,7 @@ const showAlert = (time = DEFAULT_ALERT_TIME, color = 'red') => {
   }, time);
 };
 
-// Функция взята из интернета и доработана
-// Источник - https://www.freecodecamp.org/news/javascript-debounce-example
-const debounce = (callback, timeoutDelay = DEFAULT_DEBOUNCE_TIMEOUT_DELAY) => {
+const debounce = (callback, timeoutDelay = DEBOUNCE_INTERVAL) => {
   let timeoutId;
 
   return (...rest) => {
@@ -38,19 +36,5 @@ const debounce = (callback, timeoutDelay = DEFAULT_DEBOUNCE_TIMEOUT_DELAY) => {
   };
 };
 
-// Функция взята из интернета и доработана
-// Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_throttle
-const throttle = (callback, delayBetweenFrames) => {
-  let lastTime = 0;
 
-  return (...rest) => {
-    const now = new Date();
-
-    if (now - lastTime >= delayBetweenFrames) {
-      callback.apply(this, rest);
-      lastTime = now;
-    }
-  };
-};
-
-export { isEscapeKey, showAlert, debounce, throttle };
+export { isEscapeKey, showAlert, debounce };

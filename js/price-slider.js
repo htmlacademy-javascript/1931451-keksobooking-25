@@ -1,10 +1,13 @@
+const PRICE_MAX_VALUE = 100000;
+const START_DEFAULT = 1000;
+const PRICE_SLIDER_MARGIN = '10px';
+
 const priceSlider = document.querySelector('.ad-form__slider');
 const priceField = document.querySelector('#price');
 const buttonClear = document.querySelector('.ad-form__reset');
-const PRICE_MAX_VALUE = 100000;
-const START_DEFAULT = 1000;
 
-priceSlider.style.marginTop = `${10}px`;
+
+priceSlider.style.marginTop = PRICE_SLIDER_MARGIN;
 
 noUiSlider.create(priceSlider, {
   range: {
