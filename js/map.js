@@ -96,7 +96,7 @@ const mainMarkerDefaultCoordinate = () => {
   addressField.value = getCoordinate();
 };
 
-//// Правильно ли здесь именнование функции? Или лучше переменовать на onCoordinateClick?
+
 const onClickCoordinate = (evt) => {
   mainMarker.setLatLng(evt.latlng);
   addressField.value = getCoordinate();
