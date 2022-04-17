@@ -1,20 +1,17 @@
 import { showPage, setDisableMapFilters } from './status-page.js';
 import { renderOffer } from './render-offer.js';
-import { isEscapeKey, showAlert } from './utils.js';
+import { isEscapeKey, showAlert, debounce } from './utils.js';
 import { filterData } from './filter.js';
 import { makeRequest } from './data.js';
 
 
 const RENTAL_AD_COUNT = 10;
 const MARKER_RESET_TIME = 0;
-
-const mapfilters = document.querySelector('.map__filters');
-const addressField = document.querySelector('#address');
-
 const CURRENT_COORDINATE = {
   LAT: 35.6846743,
   LNG: 139.7535566,
 };
+
 const IconsData = {
   REDICON: {
     url: './img/main-pin.svg',
@@ -27,6 +24,9 @@ const IconsData = {
     anchor: [20, 40],
   },
 };
+
+const mapfilters = document.querySelector('.map__filters');
+const addressField = document.querySelector('#address');
 
 const map = L.map('map-canvas');
 
@@ -96,13 +96,31 @@ const mainMarkerDefaultCoordinate = () => {
   addressField.value = getCoordinate();
 };
 
-//// Правильно ли здесь именнование функции? Или лучше переменовать на onCoordinateClick?
+
 const onClickCoordinate = (evt) => {
   mainMarker.setLatLng(evt.latlng);
   addressField.value = getCoordinate();
 };
 const onDraggableCoordinate = (evt) => {
   addressField.value = `${evt.target.getLatLng().lat.toFixed(5)}, ${evt.target.getLatLng().lng.toFixed(5)}`;
+};
+
+const createMarkers = (markers) => {
+  markers.forEach((marker) => {
+    createMarker(marker);
+  });
+};
+
+let offers = [];
+
+const removeMarker = () => {
+  markerGroup.clearLayers();
+};
+
+const resetMapFilters = () => {
+  mapfilters.reset();
+  removeMarker();
+  createMarkers(filterData(offers));
 };
 
 const resetMap = () => {
@@ -120,6 +138,24 @@ const onEscKeydownReset = (evt) => {
   }
 };
 
+const onMapFilterChange = debounce(() => {
+  removeMarker();
+  createMarkers(filterData(offers));
+});
+
+const onSuccess = (data) => {
+  offers = data.slice();
+
+  createMarkers(offers.slice(0, RENTAL_AD_COUNT));
+
+  mapfilters.addEventListener('change', onMapFilterChange);
+};
+
+const onFail = () => {
+  showAlert();
+  setDisableMapFilters();
+};
+
 addressField.value = getCoordinate();
 
 map.on('click', onClickCoordinate);
@@ -127,42 +163,6 @@ mainMarker.on('moveend', onDraggableCoordinate);
 
 document.querySelector('#map-canvas').addEventListener('keydown', onEscKeydownReset);
 mapfilters.addEventListener('keydown', onEscKeydownReset);
-
-const createMarkers = (markers) => {
-  markers.forEach((marker) => {
-    createMarker(marker);
-  });
-};
-
-const removeMarker = () => {
-  markerGroup.clearLayers();
-};
-
-let offers = [];
-
-function resetMapFilters() {
-  mapfilters.reset();
-  removeMarker();
-  createMarkers(filterData(offers));
-}
-
-const onMapFilterCahnge = () => {
-  removeMarker();
-  createMarkers(filterData(offers));
-};
-
-const onSuccess = (data) => {
-  offers = data.slice();
-
-  createMarkers(offers.slice(0, RENTAL_AD_COUNT));
-
-  mapfilters.addEventListener('change', onMapFilterCahnge);
-};
-
-const onFail = () => {
-  showAlert();
-  setDisableMapFilters();
-};
 
 map.on('load', () => {
   makeRequest(onSuccess, onFail, 'GET');

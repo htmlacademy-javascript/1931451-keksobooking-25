@@ -1,7 +1,8 @@
+const DISABLED_СLASSES = ['map__filters--disabled', 'ad-form--disabled'];
+
 const forms = document.querySelectorAll('.ad-form, .map__filters');
 const fieldsForms = document.querySelectorAll('fieldset, .map__filter');
 const mapFilterFields = document.querySelectorAll('.map__filter');
-const DISABLED_СLASSES = ['map__filters--disabled', 'ad-form--disabled'];
 
 
 const setDisableClass = () => {

@@ -1,3 +1,17 @@
+const MIN_NUMBER_GUESTS = 1;
+const TYPES_APARTMENT_RU = {
+  'palace': 'Дворец',
+  'flat': 'Квартира',
+  'house': 'Дом',
+  'bungalow': 'Бунгало',
+  'hotel': 'Отель',
+};
+
+const TextRoomsSpelling = {
+  MIN_VALUE: 1,
+  MAX_VALUE: 5,
+};
+
 const cardTemplate = document.querySelector('#card')
   .content
   .querySelector('.popup');
@@ -5,17 +19,6 @@ const cardTemplate = document.querySelector('#card')
 
 const renderOffer = (element) => {
   const card = cardTemplate.cloneNode(true);
-  const TYPES_APARTMENT_RU = {
-    'palace': 'Дворец',
-    'flat': 'Квартира',
-    'house': 'Дом',
-    'bungalow': 'Бунгало',
-    'hotel': 'Отель',
-  };
-  const TextRoomsSpelling = {
-    MIN_VALUE: 1,
-    MAX_VALUE: 5,
-  };
 
   if (!element.offer.features) {
     element.offer.features = [];
@@ -70,12 +73,19 @@ const renderOffer = (element) => {
     textRooms = 'комнат';
   }
 
+
+  let textGuests = 'гостей';
+
+  if (element.offer.guests === MIN_NUMBER_GUESTS) {
+    textGuests = 'гостя';
+  }
+
   if (!element.offer.rooms) {
-    card.querySelector('.popup__text--capacity').style.display = 'none';
+    card.querySelector('.popup__text--capacity').remove();
   } else if (!element.offer.guests) {
     card.querySelector('.popup__text--capacity').textContent = `${element.offer.rooms} ${textRooms}`;
   } else {
-    card.querySelector('.popup__text--capacity').textContent = `${element.offer.rooms} ${textRooms} для ${element.offer.guests} гостей.`;
+    card.querySelector('.popup__text--capacity').textContent = `${element.offer.rooms} ${textRooms} для ${element.offer.guests} ${textGuests}`;
   }
 
   if (!element.offer.checkin) {

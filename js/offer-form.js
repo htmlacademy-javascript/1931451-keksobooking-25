@@ -5,25 +5,11 @@ import { resetMap } from './map.js';
 import { openErrorPopup, openSuccessPopup } from './status-form.js';
 import { makeRequest } from './data.js';
 
-
-const form = document.querySelector('.ad-form');
-const titleField = form.querySelector('#title');
-const priceField = form.querySelector('#price');
-const typeField = form.querySelector('#type');
-const roomsField = form.querySelector('#room_number');
-const capacityField = form.querySelector('#capacity');
-const timeInField = form.querySelector('#timein');
-const timeOutField = form.querySelector('#timeout');
-const submitButton = form.querySelector('.ad-form__submit');
-const clearButton = form.querySelector('.ad-form__reset');
-
-// Правильно ли здесь именнование объекта?
-const TITLE_LENGTH = {
-  MIN: 30,
-  MAX: 100,
-};
 const PRICE_MAX_VALUE = 100000;
-
+const TITLE_LENGTH = {
+  min: 30,
+  max: 100,
+};
 const TYPE_PRICE_VALUES = {
   bungalow: 0,
   flat: 1000,
@@ -38,7 +24,6 @@ const RoomsValue = {
   THREE: '3',
   HUNDRED: '100',
 };
-
 const GuestsValue = {
   ONE: '1',
   TWO: '2',
@@ -53,6 +38,18 @@ const ROOM_GUEST_CAPACITY = {
   [RoomsValue.HUNDRED]: GuestsValue.UNAVAILABLE,
 };
 
+const form = document.querySelector('.ad-form');
+const titleField = form.querySelector('#title');
+const priceField = form.querySelector('#price');
+const typeField = form.querySelector('#type');
+const roomsField = form.querySelector('#room_number');
+const capacityField = form.querySelector('#capacity');
+const timeInField = form.querySelector('#timein');
+const timeOutField = form.querySelector('#timeout');
+const submitButton = form.querySelector('.ad-form__submit');
+const clearButton = form.querySelector('.ad-form__reset');
+
+
 const pristine = new Pristine(form, {
   classTo: 'ad-form__element',
   errorTextParent: 'ad-form__element',
@@ -60,7 +57,7 @@ const pristine = new Pristine(form, {
 });
 
 
-const validateTitle = (value) => value.length <= TITLE_LENGTH.MAX && value.length >= TITLE_LENGTH.MIN;
+const validateTitle = (value) => value.length <= TITLE_LENGTH.max && value.length >= TITLE_LENGTH.min;
 const validatePrice = (value) => value <= PRICE_MAX_VALUE && value >= TYPE_PRICE_VALUES[typeField.value];
 const validateCapacity = () => ROOM_GUEST_CAPACITY[roomsField.value].includes(capacityField.value);
 const getErrorTextCapacity = () => Number(roomsField.value) === Number(RoomsValue.HUNDRED) ? 'Комнаты не для гостей' : 'Недостаточно места';
@@ -72,14 +69,11 @@ pristine.addValidator(priceField, validatePrice, getErrorTextPrice);
 pristine.addValidator(capacityField, validateCapacity, getErrorTextCapacity);
 
 
-// Эта функция выглядела ужасно, и помоему такой же и осталась(((
 const getNumberCapacity = () => {
   const options = Array.from(capacityField.querySelectorAll('option'));
 
-  //Пытался вставить index вместо ONE, TWO и т.д / не особо получилось, выдававался странный результат / потом пытался создать новый объект и также использовать index / тоже не получилось((
-  options.forEach((option, /*index*/) => {
+  options.forEach((option) => {
     const item = option.value.toString();
-
     let result;
 
     if (roomsField.value === RoomsValue.ONE) {
@@ -98,44 +92,12 @@ const getNumberCapacity = () => {
       result = ROOM_GUEST_CAPACITY[RoomsValue.HUNDRED].includes(item);
     }
 
-    //console.log(ROOM_GUEST_CAPACITY[index].includes(item));
-    //console.log(ROOM_GUEST_CAPACITY[RoomsValue[index]].includes(item));
     if (result) {
       option.disabled = result;
     }
 
     option.disabled = !result;
   });
-
-  //Было так
-
-  // if (roomsField.value === RoomsValue.ONE) {
-  //   options[GuestsValue.UNAVAILABLE].disabled = true;
-  //   options[GuestsValue.ONE].disabled = true;
-  //   options[GuestsValue.TWO].disabled = false;
-  //   options[GuestsValue.THREE].disabled = true;
-  // }
-
-  // if (roomsField.value === RoomsValue.TWO) {
-  //   options[GuestsValue.UNAVAILABLE].disabled = true;
-  //   options[GuestsValue.ONE].disabled = false;
-  //   options[GuestsValue.TWO].disabled = false;
-  //   options[GuestsValue.THREE].disabled = true;
-  // }
-
-  // if (roomsField.value === RoomsValue.THREE) {
-  //   options[GuestsValue.UNAVAILABLE].disabled = false;
-  //   options[GuestsValue.ONE].disabled = false;
-  //   options[GuestsValue.TWO].disabled = false;
-  //   options[GuestsValue.THREE].disabled = true;
-  // }
-
-  // if (roomsField.value === RoomsValue.HUNDRED) {
-  //   options[GuestsValue.UNAVAILABLE].disabled = true;
-  //   options[GuestsValue.ONE].disabled = true;
-  //   options[GuestsValue.TWO].disabled = true;
-  //   options[GuestsValue.THREE].disabled = false;
-  // }
 };
 
 getNumberCapacity();

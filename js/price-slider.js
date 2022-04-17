@@ -1,10 +1,13 @@
+const PRICE_MAX_VALUE = 100000;
+const START_DEFAULT = 1000;
+const PRICE_SLIDER_MARGIN = '10px';
+
 const priceSlider = document.querySelector('.ad-form__slider');
 const priceField = document.querySelector('#price');
 const buttonClear = document.querySelector('.ad-form__reset');
-const PRICE_MAX_VALUE = 100000;
-const START_DEFAULT = 1000;
 
-priceSlider.style.marginTop = `${10}px`;
+
+priceSlider.style.marginTop = PRICE_SLIDER_MARGIN;
 
 noUiSlider.create(priceSlider, {
   range: {
@@ -15,12 +18,8 @@ noUiSlider.create(priceSlider, {
   step: 1,
   connect: 'lower',
   format: {
-    to: function (value) {
-      return value.toFixed(0);
-    },
-    from: function (value) {
-      return parseFloat(value);
-    },
+    to: (value) => value.toFixed(0),
+    from: (value) => parseFloat(value),
   },
 });
 
