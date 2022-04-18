@@ -5,6 +5,7 @@ import { filterData } from './filter.js';
 import { makeRequest } from './data.js';
 
 
+const VIEW_ZOOM = 12;
 const RENTAL_AD_COUNT = 10;
 const MARKER_RESET_TIME = 0;
 const CURRENT_COORDINATE = {
@@ -86,9 +87,9 @@ const mapDefaultCoordinate = () => {
   map.setView({
     lat: CURRENT_COORDINATE.LAT,
     lng: CURRENT_COORDINATE.LNG,
-  }, 12);
+  }, VIEW_ZOOM);
 };
-const mainMarkerDefaultCoordinate = () => {
+const SetMainMarkerDefaultCoordinate = () => {
   mainMarker.setLatLng({
     lat: CURRENT_COORDINATE.LAT,
     lng: CURRENT_COORDINATE.LNG,
@@ -128,7 +129,7 @@ const resetMap = () => {
   resetMapFilters();
   map.closePopup();
   setTimeout(() => {
-    mainMarkerDefaultCoordinate();
+    SetMainMarkerDefaultCoordinate();
   }, MARKER_RESET_TIME);
 };
 
@@ -171,6 +172,6 @@ map.on('load', () => {
   .setView({
     lat: CURRENT_COORDINATE.LAT,
     lng: CURRENT_COORDINATE.LNG,
-  }, 12);
+  }, VIEW_ZOOM);
 
-export { mainMarkerDefaultCoordinate, resetMap };
+export { SetMainMarkerDefaultCoordinate, resetMap };

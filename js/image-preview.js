@@ -12,7 +12,7 @@ const lodgingImageContainer = document.querySelector('.ad-form__photo');
 
 const checkMatches = (element) => FILE_TYPES.some((it) => element.endsWith(it));
 
-const errorMessage = (containers) => {
+const showErrorMessage = (containers) => {
   const container = containers;
   const element = document.createElement('div');
   element.style.color = 'red';
@@ -32,7 +32,7 @@ avatarChooser.addEventListener('change', () => {
   if (matches) {
     avatarPreview.src = URL.createObjectURL(file);
   } else {
-    errorMessage(ERROR_CONTAINERS[0]);
+    showErrorMessage(ERROR_CONTAINERS[0]);
   }
 });
 
@@ -64,7 +64,7 @@ lodgingChooser.addEventListener('change', () => {
         lodgingImageContainer.insertAdjacentElement('afterbegin', image);
       }
     } else {
-      errorMessage(ERROR_CONTAINERS[1]);
+      showErrorMessage(ERROR_CONTAINERS[1]);
     }
   });
 });

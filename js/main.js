@@ -1,10 +1,10 @@
-import { mainMarkerDefaultCoordinate } from './map.js';
+import { SetMainMarkerDefaultCoordinate } from './map.js';
 import { setOfferForm } from './offer-form.js';
 import { clearNoUiSlider } from './price-slider.js';
 import './status-form.js';
 
 
 setOfferForm(() => {
-  mainMarkerDefaultCoordinate();
+  SetMainMarkerDefaultCoordinate();
   clearNoUiSlider();
 });

@@ -116,7 +116,7 @@ typeField.addEventListener('change', (evt) => {
 
 titleField.addEventListener('input', (evt) => {
   if (evt.target.value.length === TITLE_LENGTH.MAX) {
-    evt.target.style.opacity = 0.5;
+    evt.target.style.opacity = '0.5';
     document.querySelector('.ad-form__element--error').style.display = 'block';
     document.querySelector('.ad-form__element--error').textContent = 'Максимальное количество символов';
   } else {
