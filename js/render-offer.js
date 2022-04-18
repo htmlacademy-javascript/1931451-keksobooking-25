@@ -18,7 +18,7 @@ const cardTemplate = document.querySelector('#card')
   .querySelector('.popup');
 
 
-const fillElementSrc = (container, className, element) => {
+const fillElementAvatar = (container, className, element) => {
   if (element) {
     container.querySelector(className).src = element;
   } else {
@@ -77,46 +77,53 @@ const fillElementFeatures = (container, features) => {
   });
 };
 
+const fillElementCapacity = (container, className, rooms, guests) => {
+  let textRooms = 'комнаты';
+  if (rooms === TextRoomsSpelling.MIN_VALUE) {
+    textRooms = 'комната';
+  } else if (rooms >= TextRoomsSpelling.MAX_VALUE) {
+    textRooms = 'комнат';
+  }
+
+  let textGuests = 'гостей';
+  if (guests === MIN_NUMBER_GUESTS) {
+    textGuests = 'гостя';
+  }
+
+  if (!rooms) {
+    container.querySelector('.popup__text--capacity').remove();
+  } else if (!guests) {
+    container.querySelector('.popup__text--capacity').textContent = `${rooms} ${textRooms}`;
+  } else {
+    container.querySelector('.popup__text--capacity').textContent = `${rooms} ${textRooms} для ${guests} ${textGuests}`;
+  }
+};
+
+const fillElementTimes = (container, className, checkin, checkout) => {
+  if (!checkin) {
+    container.querySelector(className).textContent = `Выезд до ${checkout}`;
+  } else if (!checkout) {
+    container.querySelector(className).textContent = `Заезд после ${checkin}`;
+  } else {
+    container.querySelector(className).textContent = `Заезд после ${checkin}, выезд до ${checkout}`;
+  }
+};
+
 
 const renderOffer = (element) => {
   const card = cardTemplate.cloneNode(true);
 
   fillElementFeatures(card, element.offer.features);
 
-  fillElementSrc(card, '.popup__avatar', element.author.avatar);
+  fillElementAvatar(card, '.popup__avatar', element.author.avatar);
   fillElementTextContent(card, '.popup__title', element.offer.title);
   fillElementTextContent(card, '.popup__text--address', element.offer.address);
   fillElementTextContent(card, '.popup__text--price', element.offer.price);
   fillElementTextContent(card, '.popup__description', element.offer.description);
   fillElementType(card, '.popup__type', element.offer.type);
 
-  let textRooms = 'комнаты';
-  if (element.offer.rooms === TextRoomsSpelling.MIN_VALUE) {
-    textRooms = 'комната';
-  } else if (element.offer.rooms >= TextRoomsSpelling.MAX_VALUE) {
-    textRooms = 'комнат';
-  }
-
-  let textGuests = 'гостей';
-  if (element.offer.guests === MIN_NUMBER_GUESTS) {
-    textGuests = 'гостя';
-  }
-
-  if (!element.offer.rooms) {
-    card.querySelector('.popup__text--capacity').remove();
-  } else if (!element.offer.guests) {
-    card.querySelector('.popup__text--capacity').textContent = `${element.offer.rooms} ${textRooms}`;
-  } else {
-    card.querySelector('.popup__text--capacity').textContent = `${element.offer.rooms} ${textRooms} для ${element.offer.guests} ${textGuests}`;
-  }
-
-  if (!element.offer.checkin) {
-    card.querySelector('.popup__text--time').textContent = `Выезд до ${element.offer.checkout}`;
-  } else if (!element.offer.checkout) {
-    card.querySelector('.popup__text--time').textContent = `Заезд после ${element.offer.checkin}`;
-  } else {
-    card.querySelector('.popup__text--time').textContent = `Заезд после ${element.offer.checkin}, выезд до ${element.offer.checkout}`;
-  }
+  fillElementCapacity(card, '.popup__text--capacity', element.offer.rooms, element.offer.guests);
+  fillElementTimes(card, '.popup__text--time', element.offer.checkin, element.offer.checkout);
 
   fillElementPhotos(card, element.offer.photos);
 
