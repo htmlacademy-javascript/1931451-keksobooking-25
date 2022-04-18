@@ -89,7 +89,7 @@ const mapDefaultCoordinate = () => {
     lng: CURRENT_COORDINATE.LNG,
   }, VIEW_ZOOM);
 };
-const SetMainMarkerDefaultCoordinate = () => {
+const setMainMarkerDefaultCoordinate = () => {
   mainMarker.setLatLng({
     lat: CURRENT_COORDINATE.LAT,
     lng: CURRENT_COORDINATE.LNG,
@@ -129,7 +129,7 @@ const resetMap = () => {
   resetMapFilters();
   map.closePopup();
   setTimeout(() => {
-    SetMainMarkerDefaultCoordinate();
+    setMainMarkerDefaultCoordinate();
   }, MARKER_RESET_TIME);
 };
 
@@ -174,4 +174,4 @@ map.on('load', () => {
     lng: CURRENT_COORDINATE.LNG,
   }, VIEW_ZOOM);
 
-export { SetMainMarkerDefaultCoordinate, resetMap };
+export { setMainMarkerDefaultCoordinate, resetMap };
