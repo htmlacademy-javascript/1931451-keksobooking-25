@@ -24,13 +24,9 @@ const filterRules = {
   'housing-rooms': (data, filter) => filter.value === data.offer.rooms.toString(),
   'housing-guests': (data, filter) => filter.value === data.offer.guests.toString(),
   'housing-features': (data, filter) => {
-    if (data.offer.features) {
-      const checkboxList = Array.from(filter.querySelectorAll('input[type="checkbox"]:checked'));
+    const checkboxList = Array.from(filter.querySelectorAll('input[type="checkbox"]:checked'));
 
-      return checkboxList.every((checkbox) => data.offer.features.includes(checkbox.value));
-    }
-
-    return true;
+    return data.offer.features ? checkboxList.every((checkbox) => data.offer.features.includes(checkbox.value)) : !(checkboxList.length > 0);
   },
 };
 
